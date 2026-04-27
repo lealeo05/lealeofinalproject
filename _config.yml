@@ -19,9 +19,11 @@
 # in the templates via {{ site.myvariable }}.
 
 title: COMP110 Final Project
-email: lealeo@unc.edu.com
+email: lealeo@unc.edu
 description: >- # this means to ignore newlines until "baseurl:"
-  A final project for COMP110 at UNC Chapel Hill. This project is a break down as to why we should implement pre-class reading and what data backs up the claim that pre-class reading is beneficial to students.
+  A final project for COMP110 at UNC Chapel Hill. This project is a break down as to why we
+  should implement pre-class reading and what data backs up the claim that pre-class reading
+  is beneficial to students.
 baseurl: "lealeofinalproject" # the subpath of your site, e.g. /blog
 url: "lealeo05.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
