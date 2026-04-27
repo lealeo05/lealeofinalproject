@@ -79,8 +79,8 @@ clean = convert_columns_to_int(
     ["own_examples", "pre_lecture_videos", "qz_effective"]
 ) # This converts the values in the selected columns from strings to integers. This allows us to do numerical analysis on the data.
 
-# Helper function to find values above a threshold
-def filter_high_values(column: list[int], threshold: int) -> list[int]:
+
+def filter_high_values(column: list[int], threshold: int) -> list[int]:# Helper function to find values above a threshold
     """Returns values greater than a threshold."""
     result: list[int] = []
     for value in column:
@@ -108,19 +108,18 @@ plt.savefig("static/imgs/quizzes.png") # This saves the graph.
 
 plt.show() # This displays all the graphs we have created. If we don't call this, the graphs will not be displayed.
 
-Bar graphs made using this code:
 
 <!-- This is a comment. Below, you'll see code for inserting an image. To make this image appear, update <custom-path>. To add an image, save it inside the imgs folder of this repository. -->
 ## Visualizations
 
-### Own Examples
-<img src="/static/imgs/own_examples.png" width="500" alt="Bar chart showing student responses for how often they create their own examples when learning">
+## Own Examples
+<img src="static/imgs/own_examples.png" width="500" alt="Bar chart showing student responses for how often they create their own examples when learning">
 
-### Pre-Lecture Videos
-<img src="/static/imgs/prelecture.png" width="500" alt="Bar chart showing student ratings of pre-lecture video effectiveness">
+## Pre-lecture Video
+<img src="static/imgs/prelecture.png" width="500" alt="Bar chart showing student ratings of pre-lecture video effectiveness">
 
-### Quizzes
-<img src="/static/imgs/quizzes.png" width="500" alt="Bar chart showing student ratings of quiz effectiveness in helping learning">
+## Quiz Effectiveness
+<img src="static/imgs/quizzes.png" width="500" alt="Bar chart showing student ratings of quiz effectiveness in helping learning">
 
 
 ## Conclusion
