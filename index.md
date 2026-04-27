@@ -3,24 +3,45 @@
 layout: default
 ---
 
-# COMP110 FINAL PROJECT (Leamsy Leon + Aminah )
+# COMP110 FINAL PROJECT (Leamsy Leon + Aminah Imran)
 
 ## Introduction
-For this final assignment for COMP110, we looked at student data to be able to improve the class in a way that is benefitical to it's steakholders (i.e. students, instructional team, academic institution or societal workforce). To begin answering this question we brainstormed some ideas on how to improve the class. 
+For this final assignment in COMP110, we analyzed student survey data to explore ways to improve the course in a way that is beneficial to its stakeholders (students, instructional staff, the academic institution, and the societal workforce). To begin, we brainstormed several ideas for improving the course.
 
 The ideas are listed below:
-1. This course should use pre-class readings because it will help students know what they are going to work on during class time, which benefits students who want to come to class more prepared.
-2. This course should add recitations to help students have an organized time to work on assignments and get individual help, which benefits students who need extra support and structure.
-3. This course should have different sections for different majors to focus more on each person’s strengths (for example, data science or computer science majors with experience could have a different section compared to majors taking the class as a prerequisite), which benefits students with different levels of experience.
-4. This course should create an app to help students review the content in a more engaging way, which benefits students who learn better through interactive and mobile-friendly tools.
-5. The course slides should be more descriptive to better support student learning and help with studying, which benefits all students, especially when reviewing material outside of class.
 
-After brainstorming, we analyzed the data collected from our fellow classmates to see what questions can or cannot be answered. We concluded that "This course should add recitations to help students have an organized time to work on assignments and get individual help" cannot be fully analyzed because we do not currently have data that shows whether recitations improve student performance or understanding in this course. To answer this question in the future we can ask students if they feel they have done better in classes that include recitations and whether they think the extra one-on-one, structured help would improve their understanding. We could also collect data by offering optional recitation sessions and comparing performance or feedback from students who attend versus those who do not.
+1. This course should use pre-class readings because they would help students understand what they are going to work on during class time. This benefits students who want to come to class more prepared.
+2. This course should add recitations to provide a structured time for students to work on assignments and receive individual help. This benefits students who need additional support and structure.
+3. This course should offer different sections based on student background or major (for example, separating students with prior experience from those taking the course as a prerequisite). This benefits students with different levels of experience.
+4. This course should create an app to help students review content in a more engaging and interactive way. This benefits students who prefer mobile-friendly and hands-on learning tools.
+5. The course slides should be more detailed to better support student learning and studying. This benefits all students, especially when reviewing material outside of class.
 
-We then went through the other ideas and decided the best one to analyze was "This course should use pre-class readings because it will help students know what they are going to work on during class time. This idea is more valuable than the others brainstormed because it has already been used in the class, but the readings were optional and not assigned for every class. Making pre-class readings more consistent could help students better understand what is going to be covered before they come to class. This has the potential to improve overall student preparedness and engagement, making it a strong opportunity for improvement with a relatively simple change.
+After brainstorming, we evaluated which ideas could be supported by the available data. We concluded that the idea of adding recitations cannot be fully analyzed because there is no current data showing whether recitations improve student performance or understanding in this course.
+
+To collect this data in the future, we could survey students about their experiences in courses that include recitations and whether they believe recitations improve their learning. Additionally, we could experimentally offer optional recitation sessions and compare the performance and feedback of students who attend versus those who do not.
+
+We then selected the idea of implementing pre-class readings for further analysis. This idea was chosen because there is existing data related to similar resources, such as pre-lecture videos, making it more feasible to analyze. Additionally, this idea has strong potential to improve student preparedness and engagement with relatively minimal changes to the course structure.
 
 ## Analysis
-WRITE ANALYSIS HERE
+To analyze whether pre-class readings could be beneficial, we examined three related variables from the dataset: "own_examples," "pre_lecture_videos," and "qz_effective."
+
+We selected these variables because:
+
+"pre_lecture_videos" serves as a proxy for pre-class readings, since both are preparatory materials.
+"own_examples" reflects how actively students engage with the material.
+"qz_effective" indicates whether study-related activities are helpful for learning.
+
+Before beginning our analysis, we previewed the dataset to better understand its structure.
+
+We then processed the data by combining survey datasets, selecting relevant columns, and converting values from strings to integers for numerical analysis. After cleaning the data, we calculated the frequency of responses for each variable.
+
+We visualized the data using bar plots, since the variables are based on Likert scale responses (1–7), which are categorical in nature.
+
+The bar plots show that both "pre_lecture_videos" and "qz_effective" have negatively skewed distributions, meaning most responses are concentrated at higher values (6–7). This suggests that students generally find pre-lecture videos and quiz preparation helpful for their learning.
+
+In contrast, "own_examples" has a more centered distribution, with many responses in the middle range (3–5). This indicates that students are less consistent in creating their own examples when learning new concepts.
+
+These patterns suggest that while students value structured learning resources (such as videos and quizzes), they may be less likely to independently engage in deeper learning strategies like creating their own examples.
 
 The code we used to do this is written below with comments explaining the code:
 import seaborn as sns # This imports the Seaborn library which is used to create statistical graphs. Sns is a short name for Seaborn.
@@ -31,7 +52,8 @@ from data_utils import (
     concat,
     select,
     convert_columns_to_int,
-    count
+    count,
+    head
 ) # This imports the functions we have in data_utils. This allows us to read our data files, manipulate them, and count values in columns.
 
 sns.set_theme() # This sets the theme, to make the graphs look nicer.
@@ -44,6 +66,9 @@ alyssa_table = columnar(alyssa_rows) # This does the same for alyssa_rows.
 
 combined = concat(izzi_table, alyssa_table) # This one combines the two tables into one table called combined. This allows us to work with all the data from both surveys at once.
 
+preview = head(combined, 10) # This previews the first 10 rows of the combined dataset so we can understand its structure before analyzing it.
+print(preview)
+
 selected = select(
     combined,
     ["own_examples", "pre_lecture_videos", "qz_effective"]
@@ -54,36 +79,59 @@ clean = convert_columns_to_int(
     ["own_examples", "pre_lecture_videos", "qz_effective"]
 ) # This converts the values in the selected columns from strings to integers. This allows us to do numerical analysis on the data.
 
+# Helper function to find values above a threshold
+def filter_high_values(column: list[int], threshold: int) -> list[int]:
+    """Returns values greater than a threshold."""
+    result: list[int] = []
+    for value in column:
+        if value > threshold:
+            result.append(value)
+    return result
+
+high_pre = filter_high_values(clean["pre_lecture_videos"], 5) # This uses the helper function to find how many students rated pre-lecture videos highly (above 5).
+
 own_freq = count(clean["own_examples"]) # This counts the frequency of each value in the "own_examples" column and stores it in a dictionary called own_freq. The keys of the dictionary are the unique values in the column, and the values are the counts of how many times each value appears.
 pre_freq = count(clean["pre_lecture_videos"]) # This does the same for the "pre_lecture_videos" column.
 qz_freq = count(clean["qz_effective"]) # This does the same for the "qz_effective" column.
 
 plt.figure() # This create a new graph. This is necessary because we want to create multiple graphs, and if we don't create a new one, all the graphs will be drawn on top of each other.
-sns.barplot(x=list(own_freq.keys()), y=list(own_freq.values())).set(title="Own Examples") # This creates a bar pot for the "own_examples" column. The x-axis has the unique values from the column, and the y-axis has the counts of how many times each value appears. The title of the graph is "Own Examples".
+sns.barplot(x=list(own_freq.keys()), y=list(own_freq.values())).set(title="Own Examples") # This creates a bar plot for the "own_examples" column. The x-axis has the unique values from the column, and the y-axis has the counts of how many times each value appears.
+plt.savefig("static/imgs/own_examples.png") # This saves the graph so we can use it on our website.
 
 plt.figure()
 sns.barplot(x=list(pre_freq.keys()), y=list(pre_freq.values())).set(title="Pre-Lecture Videos") # This also creates a bar plot but for the "pre_lecture_videos" column.
+plt.savefig("static/imgs/prelecture.png") # This saves the graph.
 
 plt.figure()
 sns.barplot(x=list(qz_freq.keys()), y=list(qz_freq.values())).set(title="Quizzes") # This also creates a bar plot but for the "qz_effective" column.
+plt.savefig("static/imgs/quizzes.png") # This saves the graph.
 
 plt.show() # This displays all the graphs we have created. If we don't call this, the graphs will not be displayed.
 
 Bar graphs made using this code:
 
 <!-- This is a comment. Below, you'll see code for inserting an image. To make this image appear, update <custom-path>. To add an image, save it inside the imgs folder of this repository. -->
-<img src="<custom-path>/static/imgs/logo.png" alt="Image of Comp110 rainbow logo. "  width="500"/>
+## Visualizations
 
+### Own Examples
+<img src="/static/imgs/own_examples.png" width="500" alt="Bar chart showing student responses for how often they create their own examples when learning">
 
+### Pre-Lecture Videos
+<img src="/static/imgs/prelecture.png" width="500" alt="Bar chart showing student ratings of pre-lecture video effectiveness">
+
+### Quizzes
+<img src="/static/imgs/quizzes.png" width="500" alt="Bar chart showing student ratings of quiz effectiveness in helping learning">
 
 
 ## Conclusion
-Using the data, it is inconclusive whether or not pre-lecture readings can help improve the class. In the analysis, we graphed the responses for "own_examples," "pre_lecture_videos," and "qz_effective." Both "qz_effective" and "pre_lecture_videos" showed a negatively skewed distribution, indicating that most of the responses were around 6–7. In contrast, "own_examples" had a more normal distribution, meaning most responses were around the middle (3–5).
+Based on our analysis, the results are inconclusive regarding whether pre-class readings would improve the course. While students generally find pre-lecture videos and quiz preparation effective, we cannot directly conclude that readings would produce the same outcomes.
 
-Pre-lecture videos are similar to readings, and students generally think they help their understanding, which suggests that readings could also be helpful. These readings could also be used to study for quizzes since they provide material students can review, and students report that studying for quizzes is effective. Not many students currently create their own examples to study, but this could increase if they have readings to reflect on.
+However, the data does suggest that structured learning resources are valuable to students. This indicates that pre-class readings could potentially support student understanding, especially if they are designed to reinforce key concepts and provide clear guidance.
 
-The reason this conclusion is inconclusive is because these ideas rely on assumptions, such as readings helping students create their own examples or improving studying. This change would also require students to spend more time on the course, which is already time-intensive due to coding assignments. One possible adjustment could be making assignments slightly shorter to balance the added workload.
+There are also trade-offs to consider. Adding required readings would increase the workload for students in an already time-intensive course. It could also require additional effort from the instructional team to create or curate effective materials. If readings require a textbook, this could introduce additional financial costs.
 
-To build more confidence in this idea, we could experimentally implement required pre-lecture readings for some class sections while keeping others the same, and then compare student performance, quiz scores, and feedback between the groups. We could also collect survey data asking students directly whether the readings improved their understanding, helped them study, or made them more likely to create their own examples. This additional data would help better determine if pre-lecture readings actually create value.
+One possible refinement of this idea would be to keep readings optional or concise, or to reduce the workload in other areas of the course to balance the added time commitment.
 
-There are also trade-offs to consider. If the readings require a textbook, this could add a financial cost to a course that is currently free. It would also require more time from students and from the instructional team, who would need to assign or create the readings and adjust the course structure. Despite these trade-offs, the idea could still benefit student understanding and overall performance.
+To further evaluate this idea, future work could involve implementing pre-class readings in some sections of the course and comparing outcomes such as quiz performance, assignment grades, and student feedback. Additionally, surveys could directly ask students whether readings improved their understanding or engagement.
+
+Overall, while the data does not provide a definitive answer, it suggests that structured preparatory materials have value, and pre-class readings could be a promising direction for future course improvements.
